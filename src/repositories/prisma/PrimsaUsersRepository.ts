@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma, User } from "@prisma/client";
-import { UsersRepository } from "../usersRepository";
+import { IUsersRepository } from "../usersRepository";
 
-export class PrismaUsersRepository implements UsersRepository {
+export class PrismaUsersRepository implements IUsersRepository {
     async findByEmail(email: string): Promise<User | null> {
         const user = await prisma.user.findUnique({
             where: {
