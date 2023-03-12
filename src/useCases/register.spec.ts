@@ -7,9 +7,9 @@ import { RegisterUseCase } from "./register";
 describe("Register use case", () => {
     test("should be able to register new user", async () => {
         const inMemoryUserRepository = new InMemoryUserRepository();
-        const registerUseCase = new RegisterUseCase(inMemoryUserRepository);
+        const sut = new RegisterUseCase(inMemoryUserRepository);
 
-        const { user } = await registerUseCase.execute({
+        const { user } = await sut.execute({
             name: "Luis",
             email: "luis@email.com",
             password: "senha987",
@@ -20,9 +20,9 @@ describe("Register use case", () => {
     
     test("should hash user password", async () => {
         const inMemoryUserRepository = new InMemoryUserRepository();
-        const registerUseCase = new RegisterUseCase(inMemoryUserRepository);
+        const sut = new RegisterUseCase(inMemoryUserRepository);
 
-        const { user } = await registerUseCase.execute({
+        const { user } = await sut.execute({
             name: "Luis",
             email: "luis@email.com",
             password: "senha987",
@@ -35,17 +35,17 @@ describe("Register use case", () => {
 
     test("should not be able to register the same email twice", async () => {
         const inMemoryUserRepository = new InMemoryUserRepository();
-        const registerUseCase = new RegisterUseCase(inMemoryUserRepository);
+        const sut = new RegisterUseCase(inMemoryUserRepository);
 
         const email = "luis@email.com";
 
-        await registerUseCase.execute({
+        await sut.execute({
             name: "Luis",
             email,
             password: "senha987",
         })
 
-        await expect(() => registerUseCase.execute({
+        await expect(() => sut.execute({
             name: "Luis Suil",
             email,
             password: "senha987"
