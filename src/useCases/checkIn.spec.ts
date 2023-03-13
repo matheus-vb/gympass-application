@@ -1,16 +1,29 @@
 import { InMemoryCheckInsRepository } from "@/repositories/inMemory/inMemoryCheckInsRepository";
+import { InMemoryGymsRepository } from "@/repositories/inMemory/inMemoryGymsRepository";
+import { Decimal } from "@prisma/client/runtime/library";
 import { expect, describe, test, beforeEach, vi, afterEach } from "vitest";
 import { CheckInUseCase } from "./checkIn";
 
 let inMemoryCheckInRepository: InMemoryCheckInsRepository
+let inMemoryGymsRepository: InMemoryGymsRepository
 let sut: CheckInUseCase
 
 describe("CheckIn use case", () => {
     beforeEach(() => {
         inMemoryCheckInRepository = new InMemoryCheckInsRepository();
-        sut = new CheckInUseCase(inMemoryCheckInRepository);
+        inMemoryGymsRepository = new InMemoryGymsRepository()
+        sut = new CheckInUseCase(inMemoryCheckInRepository, inMemoryGymsRepository);
 
         vi.useFakeTimers();
+
+        inMemoryGymsRepository.gyms.push({
+          id: "gym1",
+          title: "Gym",
+          phone: "",
+          description: "",
+          latitude: new Decimal(0),
+          longitude: new Decimal(0),  
+        })
     })
 
     afterEach(() => {
@@ -21,6 +34,8 @@ describe("CheckIn use case", () => {
         const { checkIn } = await sut.execute({
             gymId: "gym1",
             userId: "user1",
+            userLatitude: 0,
+            userLongitude: 0,
         })
 
         expect(checkIn.id).toEqual(expect.any(String));
@@ -32,11 +47,15 @@ describe("CheckIn use case", () => {
         await sut.execute({
             gymId: "gym1",
             userId: "user1",
+            userLatitude: 0,
+            userLongitude: 0,
         })
 
         await expect(() => sut.execute({
             gymId: "gym1",
             userId: "user1",
+            userLatitude: 0,
+            userLongitude: 0,
         })).rejects.toBeInstanceOf(Error)
     })
 
@@ -46,6 +65,8 @@ describe("CheckIn use case", () => {
         await sut.execute({
             gymId: "gym1",
             userId: "user1",
+            userLatitude: 0,
+            userLongitude: 0,
         })
 
         vi.setSystemTime(new Date(2022, 0, 2, 12, 0, 0))
@@ -53,6 +74,8 @@ describe("CheckIn use case", () => {
         const secondCheckIn = await sut.execute({
             gymId: "gym1",
             userId: "user1",
+            userLatitude: 0,
+            userLongitude: 0,
         })
 
         expect(secondCheckIn.checkIn.id).toEqual(expect.any(String));
