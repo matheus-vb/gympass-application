@@ -8,6 +8,14 @@ let inMemoryCheckInRepository: InMemoryCheckInsRepository
 let inMemoryGymsRepository: InMemoryGymsRepository
 let sut: CheckInUseCase
 
+//51.5581375,-0.1071289
+let userLatitude = 51.5581375;
+let userLongitude = -0.1071289;
+
+//51.5517641,-0.1270904
+let farGymLatitude = 51.5581375;
+let farGymLongitude = -0.1071289;
+
 describe("CheckIn use case", () => {
     beforeEach(() => {
         inMemoryCheckInRepository = new InMemoryCheckInsRepository();
@@ -34,8 +42,8 @@ describe("CheckIn use case", () => {
         const { checkIn } = await sut.execute({
             gymId: "gym1",
             userId: "user1",
-            userLatitude: 0,
-            userLongitude: 0,
+            userLatitude: userLatitude,
+            userLongitude: userLongitude,
         })
 
         expect(checkIn.id).toEqual(expect.any(String));
@@ -47,15 +55,15 @@ describe("CheckIn use case", () => {
         await sut.execute({
             gymId: "gym1",
             userId: "user1",
-            userLatitude: 0,
-            userLongitude: 0,
+            userLatitude: userLatitude,
+            userLongitude: userLongitude,
         })
 
         await expect(() => sut.execute({
             gymId: "gym1",
             userId: "user1",
-            userLatitude: 0,
-            userLongitude: 0,
+            userLatitude: userLatitude,
+            userLongitude: userLongitude,
         })).rejects.toBeInstanceOf(Error)
     })
 
@@ -65,8 +73,8 @@ describe("CheckIn use case", () => {
         await sut.execute({
             gymId: "gym1",
             userId: "user1",
-            userLatitude: 0,
-            userLongitude: 0,
+            userLatitude: userLatitude,
+            userLongitude: userLongitude,
         })
 
         vi.setSystemTime(new Date(2022, 0, 2, 12, 0, 0))
@@ -74,10 +82,28 @@ describe("CheckIn use case", () => {
         const secondCheckIn = await sut.execute({
             gymId: "gym1",
             userId: "user1",
-            userLatitude: 0,
-            userLongitude: 0,
+            userLatitude: userLatitude,
+            userLongitude: userLongitude,
         })
 
         expect(secondCheckIn.checkIn.id).toEqual(expect.any(String));
+    })
+
+    test("should not be able to check in when far from gym", async () => {
+        inMemoryGymsRepository.gyms.push({
+            id: "gym2",
+            title: "Far Gym",
+            phone: "",
+            description: "",
+            latitude: new Decimal(farGymLatitude),
+            longitude: new Decimal(farGymLongitude),  
+          })
+
+        await expect(() => sut.execute({
+            gymId: "gym2",
+            userId: "user1",
+            userLatitude: userLatitude,
+            userLongitude: userLongitude,
+        })).rejects.toBeInstanceOf(Error);
     })
 })
