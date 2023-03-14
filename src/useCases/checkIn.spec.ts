@@ -17,20 +17,20 @@ let farGymLatitude = 51.5517641;
 let farGymLongitude = -0.1270904;
 
 describe("CheckIn use case", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         inMemoryCheckInRepository = new InMemoryCheckInsRepository();
         inMemoryGymsRepository = new InMemoryGymsRepository()
         sut = new CheckInUseCase(inMemoryCheckInRepository, inMemoryGymsRepository);
 
         vi.useFakeTimers();
 
-        inMemoryGymsRepository.gyms.push({
-          id: "gym1",
-          title: "Gym",
-          phone: "",
-          description: "",
-          latitude: new Decimal(userLatitude),
-          longitude: new Decimal(userLongitude),  
+        await inMemoryGymsRepository.create({
+            id: "gym1",
+            title: "Gym",
+            phone: "",
+            description: "",
+            latitude: userLatitude,
+            longitude: userLongitude,
         })
     })
 
@@ -96,8 +96,8 @@ describe("CheckIn use case", () => {
             phone: "",
             description: "",
             latitude: new Decimal(farGymLatitude),
-            longitude: new Decimal(farGymLongitude),  
-          })
+            longitude: new Decimal(farGymLongitude),
+        })
 
         await expect(() => sut.execute({
             gymId: "gym2",
