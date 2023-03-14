@@ -13,8 +13,8 @@ let userLatitude = 51.5581375;
 let userLongitude = -0.1071289;
 
 //51.5517641,-0.1270904
-let farGymLatitude = 51.5581375;
-let farGymLongitude = -0.1071289;
+let farGymLatitude = 51.5517641;
+let farGymLongitude = -0.1270904;
 
 describe("CheckIn use case", () => {
     beforeEach(() => {
@@ -29,8 +29,8 @@ describe("CheckIn use case", () => {
           title: "Gym",
           phone: "",
           description: "",
-          latitude: new Decimal(0),
-          longitude: new Decimal(0),  
+          latitude: new Decimal(userLatitude),
+          longitude: new Decimal(userLongitude),  
         })
     })
 
