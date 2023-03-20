@@ -25,11 +25,27 @@ describe("CheckIn use case", () => {
         });
 
         const { checkIns } = await sut.execute({
-            userId: "user1"
+            userId: "user1",
+            page: 1
         });
 
         expect(checkIns).toHaveLength(2);
     })
 
-    
+    test("should be able to fetch paginated check in history", async () => {
+
+        for(var i = 0; i < 22; i++) {
+            inMemoryCheckInRepository.create({
+                gymId: `gym${i}`,
+                user_id: "user1"
+            })
+        }
+
+        const { checkIns } = await sut.execute({
+            userId: "user1",
+            page: 2
+        });
+
+        expect(checkIns).toHaveLength(2);
+    })
 })
