@@ -33,8 +33,6 @@ describe("Get user check in metrics use case", () => {
             userId: "user1",
         });
 
-        console.log(checkInsCount);
-
         expect(checkInsCount).toEqual(3);
     })
 })
