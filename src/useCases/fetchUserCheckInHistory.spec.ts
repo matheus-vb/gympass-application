@@ -47,5 +47,9 @@ describe("Fetch user check in history use case", () => {
         });
 
         expect(checkIns).toHaveLength(2);
+        expect(checkIns).toEqual([
+            expect.objectContaining({ gymId: "gym20"}),
+            expect.objectContaining({ gymId: "gym21"})
+        ])
     })
 })
