@@ -6,6 +6,7 @@ import { MaxCheckInsError } from "./errors/maxCheckInsError";
 import { MaxDistanceError } from "./errors/maxDistanceError";
 import { ResourceNotFoundError } from "./errors/resourceNotFoundError";
 import dayjs from "dayjs";
+import { LateCheckInValidationError } from "./errors/lateCheckInValidationError";
 
 interface IValidateCheckInUseCaseRequest {
     checkInId: string
@@ -35,7 +36,7 @@ export class ValidateCheckInUseCase {
         )
 
         if (differenceInMinutesFromCheckInCreation > 20) {
-            throw new Error()
+            throw new LateCheckInValidationError();
         }
 
        checkIn.validate_at = new Date();
