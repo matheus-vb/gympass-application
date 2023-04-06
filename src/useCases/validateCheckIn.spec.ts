@@ -11,7 +11,7 @@ describe("Validate checkIn use case", () => {
         inMemoryCheckInRepository = new InMemoryCheckInsRepository();
         sut = new ValidateCheckInUseCase(inMemoryCheckInRepository);
 
-        //vi.useFakeTimers();
+        vi.useFakeTimers();
     })
 
     afterEach(() => {
