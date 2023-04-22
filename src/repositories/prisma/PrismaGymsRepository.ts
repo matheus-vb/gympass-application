@@ -44,6 +44,4 @@ export class PrismaGymsRepository implements IGymsRepository {
 
         return gyms;
     }
-
-
 }
